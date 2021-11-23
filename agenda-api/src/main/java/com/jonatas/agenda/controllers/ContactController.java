@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,19 @@ public class ContactController {
 			return ResponseEntity.created(null).build();
 		}catch(RuntimeException e) {
 			return ResponseEntity.badRequest().build();
+		}
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Void> updateContact(@RequestBody Contact contact, @PathVariable Long id){
+		try {
+			Contact obj = contactRepository.findById(id).get();
+			obj.setName(contact.getName());
+			obj.setPhone(contact.getPhone());
+			contactRepository.save(obj);
+			return ResponseEntity.accepted().build();
+		}catch(RuntimeException e) {
+			return ResponseEntity.notFound().build();
 		}
 	}
 }
