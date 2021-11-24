@@ -53,7 +53,4 @@ public class ContactControllerTest {
 		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 		
 	}
-	
-	
-	
 }
