@@ -53,4 +53,18 @@ public class ContactControllerTest {
 		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 		
 	}
+	
+	@Test
+	public void success_saveContact() {
+		when(this.contactRepository.save(new Contact(null, "test", "1199999999"))).thenReturn(new Contact(1L, "test", "1199999999"));
+		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().post("contacts/post").then().statusCode(HttpStatus.CREATED.value());
+	
+	}
+	
+	
+	
+	
+	
+	
+	
 }
