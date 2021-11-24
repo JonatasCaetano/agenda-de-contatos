@@ -5,6 +5,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,20 @@ public class ContactControllerTest {
 	public void success_findAll() {
 		when(this.contactRepository.findAll()).thenReturn(new ArrayList<Contact>());
 		given().accept(ContentType.JSON).when().get("contacts/get").then().statusCode(HttpStatus.OK.value());
+		
+	}
+	
+	@Test
+	public void success_findById() {
+		when(this.contactRepository.findById(2L)).thenReturn(Optional.of(new Contact()));
+		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.OK.value());
+		
+	}
+	
+	@Test
+	public void failure_findById() {
+		when(this.contactRepository.findById(2L)).thenReturn(null);
+		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 		
 	}
 	
