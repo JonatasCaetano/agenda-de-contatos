@@ -23,13 +23,13 @@ public class ContactController {
 	@Autowired
 	private ContactRepository contactRepository;
 	
-	@GetMapping
+	@GetMapping(value = "/get")
 	public ResponseEntity<List<Contact>> findAll(){
 		List<Contact> contacts = contactRepository.findAll();
 		return ResponseEntity.ok().body(contacts);
 	}
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/get/{id}")
 	public ResponseEntity<Contact> findById(@PathVariable Long id){
 		try {
 			Contact contact = contactRepository.findById(id).get();
@@ -39,7 +39,7 @@ public class ContactController {
 		}
 	}
 	
-	@PostMapping
+	@PostMapping(value = "/post")
 	public ResponseEntity<Void> saveContact(@RequestBody Contact contact){
 		try {
 			contactRepository.save(contact);
@@ -49,7 +49,7 @@ public class ContactController {
 		}
 	}
 	
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/put/{id}")
 	public ResponseEntity<Void> updateContact(@RequestBody Contact contact, @PathVariable Long id){
 		try {
 			Contact obj = contactRepository.findById(id).get();
@@ -62,7 +62,7 @@ public class ContactController {
 		}
 	}
 	
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(value = "delete/{id}")
 	public ResponseEntity<Void> deleteContact(@PathVariable Long id){
 		try {
 			contactRepository.deleteById(id);

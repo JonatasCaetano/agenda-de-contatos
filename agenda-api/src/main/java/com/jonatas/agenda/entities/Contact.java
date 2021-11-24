@@ -46,6 +46,4 @@ public class Contact {
 		return id;
 	}
 	
-	
-	
 }
