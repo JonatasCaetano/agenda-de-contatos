@@ -76,5 +76,13 @@ public class ContactControllerTest {
 		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().put("contacts/put/{id}", 1L).then().statusCode(HttpStatus.ACCEPTED.value());
 	
 	}
+	
+	@Test
+	public void failure_updateContact() {
+		when(this.contactRepository.findById(1L)).thenReturn(null);
+		when(this.contactRepository.save(isNull())).thenThrow(new RuntimeException());
+		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().put("contacts/put/{id}", 1L).then().statusCode(HttpStatus.NOT_FOUND.value());
+	
+	}
 
 }
