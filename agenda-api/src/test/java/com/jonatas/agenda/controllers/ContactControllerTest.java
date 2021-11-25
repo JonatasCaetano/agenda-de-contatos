@@ -2,10 +2,11 @@ package com.jonatas.agenda.controllers;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -38,65 +39,65 @@ public class ContactControllerTest {
 	
 	@Test
 	public void success_findAll() {
-		when(this.contactRepository.findAll()).thenReturn(new ArrayList<Contact>());
+		doReturn(new ArrayList<Contact>()).when(this.contactRepository).findAll();
 		given().accept(ContentType.JSON).when().get("contacts/get").then().statusCode(HttpStatus.OK.value());
 		
 	}
 	
 	@Test
 	public void success_findById() {
-		when(this.contactRepository.findById(2L)).thenReturn(Optional.of(new Contact()));
+		doReturn(Optional.of(new Contact())).when(this.contactRepository).findById(anyLong());
 		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.OK.value());
 		
 	}
 	
 	@Test
 	public void failure_findById() {
-		when(this.contactRepository.findById(2L)).thenThrow(new RuntimeException());
+		doThrow(new RuntimeException()).when(this.contactRepository).findById(anyLong());
 		given().accept(ContentType.JSON).when().get("contacts/get/{Id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 		
 	}
 	
 	@Test
 	public void success_saveContact() {
-		when(this.contactRepository.save(new Contact(null, "test", "1199999999"))).thenReturn(new Contact(2L, "test", "1199999999"));
-		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().post("contacts/post").then().statusCode(HttpStatus.CREATED.value());
+		doReturn(new Contact()).when(this.contactRepository).save(isA(Contact.class));
+		given().contentType(ContentType.JSON).body(new Contact()).when().post("contacts/post").then().statusCode(HttpStatus.CREATED.value());
 	
 	}
 	
 	@Test
 	public void failure_saveContact() {
-		when(this.contactRepository.save(isNull())).thenThrow(new RuntimeException());
-		given().contentType(ContentType.JSON).when().post("contacts/post").then().statusCode(HttpStatus.BAD_REQUEST.value());
+		doThrow(new RuntimeException()).when(this.contactRepository).save(isA(Contact.class));
+		given().contentType(ContentType.JSON).body(new Contact()).when().post("contacts/post").then().statusCode(HttpStatus.BAD_REQUEST.value());
 	
 	}
 	
 	@Test
 	public void success_updateContact() {
-		when(this.contactRepository.findById(2L)).thenReturn(Optional.of(new Contact()));
-		when(this.contactRepository.save(new Contact(null, "test", "1199999999"))).thenReturn(new Contact(2L, "test", "1199999999"));
-		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().put("contacts/put/{id}", 2L).then().statusCode(HttpStatus.ACCEPTED.value());
+		doReturn(Optional.of(new Contact())).when(this.contactRepository).findById(anyLong());
+		doReturn(new Contact()).when(this.contactRepository).save(new Contact());
+		given().contentType(ContentType.JSON).body(new Contact()).when().put("contacts/put/{id}", 2L).then().statusCode(HttpStatus.ACCEPTED.value());
 	
 	}
 	
 	@Test
 	public void failure_updateContact() {
-		when(this.contactRepository.findById(2L)).thenThrow(new RuntimeException());
-		when(this.contactRepository.save(isNull())).thenThrow(new RuntimeException());
-		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().put("contacts/put/{id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
+		doThrow(new RuntimeException()).when(this.contactRepository).findById(anyLong());
+		doThrow(new RuntimeException()).when(this.contactRepository).save(isA(Contact.class));
+		given().contentType(ContentType.JSON).body(new Contact()).when().put("contacts/put/{id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 	
 	}
 	
 	@Test
 	public void success_delete() {
-		doNothing().when(this.contactRepository).deleteById(2L);
+		doNothing().when(this.contactRepository).deleteById(anyLong());
 		given().contentType(ContentType.JSON).when().delete("contacts/delete/{id}", 2L).then().statusCode(HttpStatus.OK.value());
 
 	}
 	
 	@Test
 	public void failure_delete() {
-		doThrow(new RuntimeException()).when(this.contactRepository).deleteById(2L);
+		doThrow(new RuntimeException()).when(this.contactRepository).deleteById(anyLong());
 		given().contentType(ContentType.JSON).when().delete("contacts/delete/{id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 
 	}
