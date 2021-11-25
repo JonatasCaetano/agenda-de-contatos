@@ -2,6 +2,7 @@ package com.jonatas.agenda.controllers;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -58,6 +59,13 @@ public class ContactControllerTest {
 	public void success_saveContact() {
 		when(this.contactRepository.save(new Contact(null, "test", "1199999999"))).thenReturn(new Contact(1L, "test", "1199999999"));
 		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().post("contacts/post").then().statusCode(HttpStatus.CREATED.value());
+	
+	}
+	
+	@Test
+	public void failure_saveContact() {
+		when(this.contactRepository.save(isNull())).thenThrow(new RuntimeException());
+		given().contentType(ContentType.JSON).when().post("contacts/post").then().statusCode(HttpStatus.BAD_REQUEST.value());
 	
 	}
 	
