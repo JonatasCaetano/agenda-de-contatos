@@ -69,10 +69,12 @@ public class ContactControllerTest {
 	
 	}
 	
+	@Test
+	public void success_updateContact() {
+		when(this.contactRepository.findById(1L)).thenReturn(Optional.of(new Contact()));
+		when(this.contactRepository.save(new Contact(null, "test", "1199999999"))).thenReturn(new Contact(1L, "test", "1199999999"));
+		given().contentType(ContentType.JSON).body(new Contact(null, "test", "1199999999")).when().put("contacts/put/{id}", 1L).then().statusCode(HttpStatus.ACCEPTED.value());
 	
-	
-	
-	
-	
-	
+	}
+
 }
