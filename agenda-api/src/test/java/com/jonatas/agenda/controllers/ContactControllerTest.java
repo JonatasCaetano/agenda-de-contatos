@@ -4,6 +4,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.standaloneSetup;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -92,6 +93,11 @@ public class ContactControllerTest {
 		given().contentType(ContentType.JSON).when().delete("contacts/delete/{id}", 2L).then().statusCode(HttpStatus.OK.value());
 
 	}
+	
+	@Test
+	public void failure_delete() {
+		doThrow(new RuntimeException()).when(this.contactRepository).deleteById(2L);
+		given().contentType(ContentType.JSON).when().delete("contacts/delete/{id}", 2L).then().statusCode(HttpStatus.NOT_FOUND.value());
 
-
+	}
 }
