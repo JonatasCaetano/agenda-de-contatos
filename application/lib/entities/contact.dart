@@ -6,34 +6,30 @@ class Contact {
   Contact(this._id, this._name, this._phone);
 
   Contact.fromMap(Map map) {
-    this._id = map["id"];
-    this._name = map["name"];
-    this._phone = map["phone"];
+    _id = map["id"];
+    _name = map["name"];
+    _phone = map["phone"];
   }
 
-  String get phone => _phone;
+  String get getPhone => _phone;
 
-  set phone(String value) {
+  set setPhone(String value) {
     _phone = value;
   }
 
-  String get name => _name;
+  String get getName => _name;
 
-  set name(String value) {
+  set setName(String value) {
     _name = value;
   }
 
-  int get id => _id;
-
-  set id(int value) {
-    _id = value;
-  }
+  int get getId => _id;
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      "id": this._id,
-      "name": this._name,
-      "phone": this._phone,
+      "id": _id,
+      "name": _name,
+      "phone": _phone,
     };
     return map;
   }
