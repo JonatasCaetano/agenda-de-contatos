@@ -1,4 +1,6 @@
+import 'package:application/entities/contact.dart';
 import 'package:application/models/contact_model.dart';
+import 'package:application/screens/contact_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -81,6 +83,15 @@ class _HomeState extends State<Home> {
                                       IconButton(
                                           onPressed: () {
                                             //***editar contato */
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ContactScreen(
+                                                            contact: Contact(
+                                                                0,
+                                                                "jonatas",
+                                                                "14999999999"))));
                                             // ignore: avoid_print
                                             print("abrir tela editar contato");
                                           },
@@ -100,6 +111,11 @@ class _HomeState extends State<Home> {
           child: const Icon(Icons.add),
           onPressed: () {
             //**salvar novo contato */
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ContactScreen(contact: Contact(0, "", ""))));
             // ignore: avoid_print
             print("abrir tela adicionar contato");
           },
