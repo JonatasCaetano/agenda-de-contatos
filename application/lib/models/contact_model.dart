@@ -6,16 +6,20 @@ import 'dart:convert';
 
 class ContactModel extends Model {
   String text = '';
+  List list = [];
   String base = 'http://192.168.0.109:8080/contacts';
 
   Future<List<dynamic>> findAll() async {
     var url = Uri.parse(base + "/get");
     http.Response response = await http.get(url);
     List<dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      list = data;
+    }
     return data;
   }
 
-  findById({required int id}) {}
+  findById({required String id}) {}
 
   Future post({required Contact contact, required BuildContext context}) async {
     var url = Uri.parse(base + "/post");
@@ -52,5 +56,16 @@ class ContactModel extends Model {
     }
   }
 
-  delete({required int id}) {}
+  delete(
+      {required int index,
+      required Contact contact,
+      required BuildContext context}) async {
+    var url = Uri.parse(base + "/delete/${contact.getId}");
+    // ignore: unused_local_variable
+    http.Response response = await http.delete(
+      url,
+      headers: {"Content-type": "application/json; charset=UTF-8"},
+    );
+    // ignore: avoid_print
+  }
 }

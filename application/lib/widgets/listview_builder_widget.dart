@@ -10,45 +10,40 @@ class ListViewBuilderWidget extends StatefulWidget {
 }
 
 class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
-  Future<List<String>> returnList({required String text}) async {
-    List<String> list = ["test", "test", "test", "test", "test", "test"];
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactModel>(
         builder: (context, child, contact) {
       return FutureBuilder<List<String>>(
           //**obter todos os contatos */
-          future: returnList(text: contact.text),
+          future: contact.findById(id: contact.text),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            } else {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                case ConnectionState.active:
-                case ConnectionState.waiting:
-                  // ignore: avoid_print
-                  print(snapshot.connectionState);
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+              case ConnectionState.active:
+              case ConnectionState.waiting:
+                // ignore: avoid_print
+                print(snapshot.connectionState);
+                return Container();
+              case ConnectionState.done:
+                if (!snapshot.hasData) {
                   return Container();
-                case ConnectionState.done:
+                } else {
                   // ignore: avoid_print
                   print(snapshot.connectionState);
-                  List<String> list2 = snapshot.data!;
+                  List<String> _list = snapshot.data!;
                   return ListView.builder(
-                      itemCount: list2.length,
+                      itemCount: _list.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            contact.text = list2[index].toString();
+                            contact.text = _list[index].toString();
                             Navigator.pop(context);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                              list2[index].toString(),
+                              _list[index].toString(),
                               style: const TextStyle(
                                 fontSize: 18,
                               ),
@@ -56,7 +51,7 @@ class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
                           ),
                         );
                       });
-              }
+                }
             }
           });
     });

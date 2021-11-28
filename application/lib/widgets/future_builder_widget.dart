@@ -37,12 +37,17 @@ class _FutureBuilderWidgetState extends State<FutureBuilderWidget> {
                   // ignore: avoid_print
                   print("datos recebidos: " + _list.toString());
                   return ListView.builder(
-                      itemCount: _list!.length,
+                      itemCount: contact.list.length,
                       itemBuilder: (context, index) {
                         return Dismissible(
                             direction: DismissDirection.endToStart,
                             onDismissed: (_) {
                               //***remover contato
+                              contact.delete(
+                                contact: Contact.fromMap(contact.list[index]),
+                                context: context,
+                                index: index,
+                              );
                               // ignore: avoid_print
                               print("remover contato");
                             },
@@ -57,16 +62,24 @@ class _FutureBuilderWidgetState extends State<FutureBuilderWidget> {
                                 ),
                               ),
                             ),
-                            key: Key(_list[index]["name"].toString()),
+                            key: Key(DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString()),
                             child: Card(
                                 child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListTile(
                                 title: Row(
                                   children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                          contact.list[index]["id"].toString()),
+                                    ),
                                     Expanded(
                                         child: Text("Nome: " +
-                                            _list[index]["name"].toString())),
+                                            contact.list[index]["name"]
+                                                .toString())),
                                     IconButton(
                                         onPressed: () {
                                           //***editar contato */
@@ -76,7 +89,8 @@ class _FutureBuilderWidgetState extends State<FutureBuilderWidget> {
                                                   builder: (context) =>
                                                       ContactScreen(
                                                           contact: Contact
-                                                              .fromMap(_list[
+                                                              .fromMap(contact
+                                                                      .list[
                                                                   index]))));
                                           // ignore: avoid_print
                                           print("abrir tela editar contato");
@@ -85,7 +99,7 @@ class _FutureBuilderWidgetState extends State<FutureBuilderWidget> {
                                   ],
                                 ),
                                 subtitle: Text("Phone: " +
-                                    _list[index]["phone"].toString()),
+                                    contact.list[index]["phone"].toString()),
                               ),
                             )));
                       });
