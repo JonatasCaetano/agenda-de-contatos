@@ -2,10 +2,8 @@ import 'package:application/models/contact_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-// ignore: must_be_immutable
 class ListViewBuilderWidget extends StatefulWidget {
-  String text;
-  ListViewBuilderWidget({required this.text, Key? key}) : super(key: key);
+  const ListViewBuilderWidget({Key? key}) : super(key: key);
 
   @override
   _ListViewBuilderWidgetState createState() => _ListViewBuilderWidgetState();
@@ -23,7 +21,7 @@ class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
         builder: (context, child, contact) {
       return FutureBuilder<List<String>>(
           //**obter todos os contatos */
-          future: returnList(text: widget.text),
+          future: returnList(text: contact.text),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Container();
@@ -43,7 +41,10 @@ class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
                       itemCount: list2.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            contact.text = list2[index].toString();
+                            Navigator.pop(context);
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(

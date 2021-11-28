@@ -14,14 +14,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String text = '';
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactModel>(
         builder: (context, child, contact) {
       return Scaffold(
-        appBar: AppBar(title: Text("Contacts " + text), actions: [
+        appBar: AppBar(title: Text("Contacts " + contact.text), actions: [
           IconButton(
             onPressed: () async {
               // ignore: avoid_print
@@ -29,15 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
               String result =
                   await showSearch(context: context, delegate: SearchScreen());
               setState(() {
-                text = result;
+                contact.text = result;
               });
             },
             icon: const Icon(Icons.search),
           )
         ]),
-        body: FutureBuilderWidget(
-          text: text,
-        ),
+        body: const FutureBuilderWidget(),
         floatingActionButton: FloatingActionButton(
           mini: true,
           child: const Icon(Icons.add),

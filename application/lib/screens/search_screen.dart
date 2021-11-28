@@ -30,8 +30,6 @@ class SearchScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return ListViewBuilderWidget(
-      text: query,
-    );
+    return const ListViewBuilderWidget();
   }
 }
