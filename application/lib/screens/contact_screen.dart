@@ -54,9 +54,12 @@ class _ContactScreenState extends State<ContactScreen> {
             Contact _contact = Contact(0, name.text, phone.text);
             //**salvar novo contato */
             if (widget.contact.getName.isEmpty) {
-              contact.post(contact: _contact);
+              contact.post(contact: _contact, context: context);
             } else {
-              contact.put(id: widget.contact.getId, contact: _contact);
+              contact.put(
+                contact: _contact,
+                context: context,
+              );
             }
             // ignore: avoid_print
             print("salvar contato");
