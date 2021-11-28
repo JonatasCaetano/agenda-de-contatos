@@ -31,18 +31,26 @@ class ContactModel extends Model {
     if (response.statusCode == 201) {
       Navigator.pop(context);
     }
-    // ignore: avoid_print
-    print(response.statusCode);
-    // ignore: avoid_print
-    print(response.headers);
-    // ignore: avoid_print
-    print(response.body);
   }
 
-  Future put({
+  put({
     required Contact contact,
     required BuildContext context,
-  }) async {}
+  }) async {
+    var url = Uri.parse(base + "/put/${contact.getId}");
+    var body = json.encode({
+      "name": contact.getName,
+      "phone": contact.getPhone,
+    });
+    http.Response response = await http.put(
+      url,
+      headers: {"Content-type": "application/json; charset=UTF-8"},
+      body: body,
+    );
+    if (response.statusCode == 202) {
+      Navigator.pop(context);
+    }
+  }
 
   delete({required int id}) {}
 }

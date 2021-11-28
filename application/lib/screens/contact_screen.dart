@@ -51,10 +51,14 @@ class _ContactScreenState extends State<ContactScreen> {
           mini: true,
           child: const Icon(Icons.save),
           onPressed: () {
-            Contact _contact = Contact(0, name.text, phone.text);
+            Contact _contact =
+                Contact(widget.contact.getId, name.text, phone.text);
             //**salvar novo contato */
             if (widget.contact.getName.isEmpty) {
-              contact.post(contact: _contact, context: context);
+              contact.post(
+                contact: _contact,
+                context: context,
+              );
             } else {
               contact.put(
                 contact: _contact,
