@@ -14,7 +14,7 @@ class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactModel>(
         builder: (context, child, contact) {
-      return FutureBuilder<List<String>>(
+      return FutureBuilder<List<dynamic>>(
           //**obter todos os contatos */
           future: contact.findById(id: contact.text),
           builder: (context, snapshot) {
@@ -31,19 +31,19 @@ class _ListViewBuilderWidgetState extends State<ListViewBuilderWidget> {
                 } else {
                   // ignore: avoid_print
                   print(snapshot.connectionState);
-                  List<String> _list = snapshot.data!;
                   return ListView.builder(
-                      itemCount: _list.length,
+                      itemCount: contact.list.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            contact.text = _list[index].toString();
+                            contact.text = contact.list[index]["id"].toString();
+                            contact.findById(id: contact.text);
                             Navigator.pop(context);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Text(
-                              _list[index].toString(),
+                              contact.list[index]["id"].toString(),
                               style: const TextStyle(
                                 fontSize: 18,
                               ),

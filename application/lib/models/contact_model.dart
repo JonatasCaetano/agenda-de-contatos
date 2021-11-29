@@ -16,10 +16,21 @@ class ContactModel extends Model {
     if (response.statusCode == 200) {
       list = data;
     }
-    return data;
+    return list;
   }
 
-  findById({required String id}) {}
+  Future<List<dynamic>> findById({required String id}) async {
+    if (id.isNotEmpty) {
+      var url = Uri.parse(base + "/get/" + id);
+      http.Response response = await http.get(url);
+      Map<dynamic, dynamic> map = json.decode(response.body);
+      list = [];
+      if (response.statusCode == 200) {
+        list.add(map);
+      }
+    }
+    return list;
+  }
 
   Future post({required Contact contact, required BuildContext context}) async {
     var url = Uri.parse(base + "/post");
@@ -66,6 +77,7 @@ class ContactModel extends Model {
       url,
       headers: {"Content-type": "application/json; charset=UTF-8"},
     );
+    list.removeAt(index);
     // ignore: avoid_print
   }
 }
